@@ -11,17 +11,28 @@
             <span><a href="{% url 'qrmaster:logout' %}">Logout</a></span>
         {% endif %}
 
+        <h2>Quests</h2>
 		{% if quests %}
-			<ul>
-			{% for quest in quests %}
-				<li>
-					<a href="{% url 'qrmaster:quest' quest.id %}">{{ quest.name }}</a>
-				</li>
-			{% endfor %}
-			</ul>
+            <div id="view">
+                <ul>
+                {% for quest in quests %}
+                    <li>
+                        <a href="{% url 'qrmaster:quest' quest.id %}">{{ quest.name }}</a>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
 		{% else %}
 			<p>No quests yet!</p>
 		{% endif %}
+        
+        <div id="create">
+            <form action="{% url 'qrmaster:quest_create' %}" method="post">
+                {% csrf_token %}
+                <input type="text" name="name" required placeholder="name"/>
+                <input type="submit" value="create" />
+            </form>
+        </div>
         
 	</body>
 </html>

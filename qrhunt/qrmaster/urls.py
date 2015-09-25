@@ -7,4 +7,5 @@ urlpatterns = [
     url(r'^login/$', views.do_login, name='login'),
     url(r'^logout/$', views.do_logout, name='logout'),
     url(r'^quests/(?P<pk>[0-9]+)$', views.quest, name='quest'),
+    url(r'^quest/create/$', views.quest_create, name='quest_create'),
 ]

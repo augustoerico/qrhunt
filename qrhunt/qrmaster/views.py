@@ -17,6 +17,16 @@ def index(request):
 def quest(request, pk):
     return render(request, 'qrmaster/quest.html')
 
+@login_required(login_url='qrmaster:quest_create')
+def quest_create(request):
+    master = request.user
+    name = request.POST['name']
+    
+    quest = Quest(name=name, master=master)
+    quest.save()
+    
+    return redirect('qrmaster:index') # FIXME redirect to created quest
+
 def do_login(request):
     
     if request.method == 'GET':
