@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+	</head>
+	<body>
+		<h1>{{ quest.name }}</h1>
+		
+		<a href="{% url 'qrmaster:index' %}">Back to homepage</a>
+        
+        {% if hints %}
+            <div id="show-view">
+                {% for hint in hints %}
+                    <div>
+                        <li>{{hint.title}}</li><br>
+                        <li>{{hint.message}}</li>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No hint yet!</p>
+        {% endif %}
+        
+	</body>
+</html>

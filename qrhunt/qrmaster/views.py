@@ -3,9 +3,19 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
+from qrmaster.models import Quest, Hint
+
 @login_required(login_url='qrmaster:login')
 def index(request):
-	return render(request, 'qrmaster/index.html')    
+    user = request.user
+    quests = Quest.objects.filter(master=user)
+    
+    return render(request, 'qrmaster/index.html', 
+				  {'user': user, 'quests': quests})
+
+@login_required(login_url='qrmaster:login')
+def quest(request, pk):
+    return render(request, 'qrmaster/quest.html')
 
 def do_login(request):
     

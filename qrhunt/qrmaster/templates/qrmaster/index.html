@@ -6,8 +6,22 @@
 	<body>
 		<h1>Index</h1>
         
-        <p>First page!</p>
+        {% if user %}
+            <p>Hello, {{ user.username }}</p>
+            <span><a href="{% url 'qrmaster:logout' %}">Logout</a></span>
+        {% endif %}
+
+		{% if quests %}
+			<ul>
+			{% for quest in quests %}
+				<li>
+					<a href="{% url 'qrmaster:quest' quest.id %}">{{ quest.name }}</a>
+				</li>
+			{% endfor %}
+			</ul>
+		{% else %}
+			<p>No quests yet!</p>
+		{% endif %}
         
-        <a href="{% url 'qrmaster:logout' %}">Logout</a>
 	</body>
 </html>
