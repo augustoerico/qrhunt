@@ -4,7 +4,17 @@
 		<meta charset="utf-8">
 	</head>
 	<body>
-		<h1>{{ quest.name }}</h1>
+        <div id="quest-show">
+            <h1>{{ quest.name }}</h1>
+        </div>
+		<div id="quest-edit">
+            <form method="post" action="{% url 'qrmaster:quest_edit' quest.pk %}">
+                {% csrf_token %}
+                <input type="text" name="name" value="{{ quest.name }}" placeholder="quest name" />
+                <input type="submit" value="save" />
+            </form>
+        </div>
+        <a href="{% url 'qrmaster:quest_delete' quest.id %}">Delete</a>
         
         {% if hints %}
             <div id="show-view">
@@ -14,6 +24,8 @@
                             <div>
                                 <p><b>{{ hint.title }}</b></p>
                                 <p>{{ hint.message }}</p>
+                                <p>url: {% url 'qrmaster:hint' hint.id %}</p>
+                                <a href="{% url 'qrmaster:hint_delete' hint.id %}">Delete</a>
                             </div>
                         </li>
                     {% endfor %}
@@ -23,7 +35,7 @@
             <p>No hint yet!</p>
         {% endif %}
         
-        <h1>Create</h1>
+        <h1>Create a hint!</h1>
         <form method="post" action="{% url 'qrmaster:hint_create' quest.pk %}">
             {% csrf_token %}
             <input type="text" name="title" placeholder="title" />

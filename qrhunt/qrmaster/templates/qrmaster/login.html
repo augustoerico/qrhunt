@@ -12,7 +12,7 @@
 			{% endfor %}
 		{% endif %}
 
-		<div id="login-form">
+		<div id="login">
 			<h2>Login</h2>
 			<form action="{% url 'qrmaster:login' %}" method="post">
 				{% csrf_token %}
@@ -22,5 +22,18 @@
 				<input type="submit" value="Login" />
 			</form>
 		</div>
+        
+        <div id="account-create">
+			<h2>Create your account</h2>
+			<form action="{% url 'qrmaster:account_create' %}" method="post">
+				{% csrf_token %}
+				<input type="text" name="username" placeholder="username" required />
+				<input type="text" name="email" placeholder="email" required />
+				<input type="password" name="password" placeholder="password" required />
+				
+				<input type="submit" value="create" />
+			</form>	
+		</div>
+        
 	</body>
 </html>

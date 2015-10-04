@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from qrmaster.models import Quest, Hint
+from django.contrib.auth.models import User
 
 @login_required(login_url='qrmaster:login')
 def index(request):
@@ -13,6 +14,7 @@ def index(request):
     return render(request, 'qrmaster/index.html', 
 				  {'user': user, 'quests': quests})
 
+# QUEST STUFF -----------------------------------------------------------------
 @login_required(login_url='qrmaster:login')
 def quest(request, pk):
     quest = Quest.objects.get(pk=pk)
@@ -29,7 +31,28 @@ def quest_create(request):
     quest = Quest(name=name, master=master)
     quest.save()
     
-    return redirect('qrmaster:index') # FIXME redirect to created quest
+    return redirect('qrmaster:index')
+
+@login_required(login_url='qrmaster:login')
+def quest_delete(request, pk):
+    quest = Quest.objects.get(pk=pk)
+    quest.delete()
+    
+    return redirect('qrmaster:index')
+
+@login_required(login_url='qrmaster:login')
+def quest_edit(request, pk):
+    quest = Quest.objects.get(pk=pk)
+    quest.name = request.POST['name']
+    quest.save()
+    
+    return redirect('qrmaster:index')
+
+# HINT STUFF ------------------------------------------------------------------
+def hint(request, pk):
+    hint = Hint.objects.get(id=pk)
+    return render(request, 'qrmaster/hint.html',
+                 {'hint': hint})
 
 @login_required(login_url='qrmaster:login')
 def hint_create(request, quest_pk):
@@ -39,14 +62,25 @@ def hint_create(request, quest_pk):
     quest = Quest.objects.get(pk=quest_pk)
     quest.hint_set.create(title=title, message=message)
     
-    return redirect('qrmaster:index') #FIXME redirect to created hint
-    
+    return redirect('qrmaster:index')
 
-def hint(request, pk):
+@login_required(login_url='qrmaster:login')
+def hint_delete(request, pk):
     hint = Hint.objects.get(id=pk)
-    return render(request, 'qrmaster/hint.html',
-                 {'hint': hint})
+    hint.delete()
+    
+    return redirect('qrmaster:index')
 
+@login_required(login_url='qrmaster:login')
+def hint_edit(request, pk):
+    hint = Hint.objects.get(id=pk)
+    hint.title = request.POST['title']
+    hint.message = request.POST['message']
+    hint.save()
+    
+    return redirect('qrmaster:index')
+
+# LOGIN STUFF -----------------------------------------------------------------
 def do_login(request):
     
     if request.method == 'GET':
@@ -69,3 +103,16 @@ def do_login(request):
 def do_logout(request):
     logout(request)
     return redirect('qrmaster:login')
+
+def account_create(request):
+	username = request.POST['username']
+	email = request.POST['email']
+	password = request.POST['password']
+	
+	user = User.objects.create_user(username, email, password)
+	if user:
+		messages.add_message(request, messages.SUCCESS, 'Account created.')		
+	else:
+		messages.add_message(request, messages.ERROR, 'Failed at account creation.')
+	
+	return redirect('qrmaster:login')
