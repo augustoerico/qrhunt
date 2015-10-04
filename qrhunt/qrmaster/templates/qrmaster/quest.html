@@ -5,21 +5,33 @@
 	</head>
 	<body>
 		<h1>{{ quest.name }}</h1>
-		
-		<a href="{% url 'qrmaster:index' %}">Back to homepage</a>
         
         {% if hints %}
             <div id="show-view">
-                {% for hint in hints %}
-                    <div>
-                        <li>{{hint.title}}</li><br>
-                        <li>{{hint.message}}</li>
-                    </div>
-                {% endfor %}
+                <ul>
+                    {% for hint in hints %}
+                        <li>
+                            <div>
+                                <p><b>{{ hint.title }}</b></p>
+                                <p>{{ hint.message }}</p>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
             </div>
         {% else %}
             <p>No hint yet!</p>
         {% endif %}
+        
+        <h1>Create</h1>
+        <form method="post" action="{% url 'qrmaster:hint_create' quest.pk %}">
+            {% csrf_token %}
+            <input type="text" name="title" placeholder="title" />
+            <input type="text" name="message" placeholder="message"/>
+            <input type="submit" />
+        </form>
+        
+        <a href="{% url 'qrmaster:index' %}">Back to homepage</a>
         
 	</body>
 </html>

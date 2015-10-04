@@ -15,9 +15,13 @@ def index(request):
 
 @login_required(login_url='qrmaster:login')
 def quest(request, pk):
-    return render(request, 'qrmaster/quest.html')
+    quest = Quest.objects.get(pk=pk)
+    hints = quest.hint_set.all()
+    
+    return render(request, 'qrmaster/quest.html',
+                 {'quest': quest, 'hints': hints})
 
-@login_required(login_url='qrmaster:quest_create')
+@login_required(login_url='qrmaster:login')
 def quest_create(request):
     master = request.user
     name = request.POST['name']
@@ -26,6 +30,22 @@ def quest_create(request):
     quest.save()
     
     return redirect('qrmaster:index') # FIXME redirect to created quest
+
+@login_required(login_url='qrmaster:login')
+def hint_create(request, quest_pk):
+    title = request.POST['title']
+    message = request.POST['message']
+    
+    quest = Quest.objects.get(pk=quest_pk)
+    quest.hint_set.create(title=title, message=message)
+    
+    return redirect('qrmaster:index') #FIXME redirect to created hint
+    
+
+def hint(request, pk):
+    hint = Hint.objects.get(id=pk)
+    return render(request, 'qrmaster/hint.html',
+                 {'hint': hint})
 
 def do_login(request):
     
