@@ -21,11 +21,19 @@
                 <ul>
                     {% for hint in hints %}
                         <li>
-                            <div>
+                            <div id="hint-show">
                                 <p><b>{{ hint.title }}</b></p>
                                 <p>{{ hint.message }}</p>
                                 <p>url: {% url 'qrmaster:hint' hint.id %}</p>
                                 <a href="{% url 'qrmaster:hint_delete' hint.id %}">Delete</a>
+                            </div>
+                            <div id="hint-edit">
+                                <form method="post" action="{% url 'qrmaster:hint_edit' hint.id %}" >
+                                    {% csrf_token %}
+                                    <input name="title" placeholder="hint title" value="{{ hint.title }}" />
+                                    <input name="message" placeholder="hint message" value="{{ hint.message }}" />
+                                    <input type="submit" value="save" />
+                                </form>
                             </div>
                         </li>
                     {% endfor %}
